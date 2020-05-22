@@ -1,14 +1,15 @@
 import random
 
 def PointRandom(field, size):
-    while True:
+    Ok = True
+    while Ok:
         y = random.randint(1, size - 2)
         x = random.randint(1, size - 2)
         list_of_walls = ['', '0']
         if field[y][x] in list_of_walls:
             pass
         else:
-            break
+            Ok = False
     field[y][x] = "@"
     return field
 

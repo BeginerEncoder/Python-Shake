@@ -6,7 +6,8 @@ import keyboard
 from functions import *
 
 score = 0
-size = 50
+size = 40
+speed = 10
 F = Field(size)
 field = F.FieldCreate()
 shake = Shake(size, field, score, F)
@@ -14,19 +15,19 @@ field = shake.spawn()
 field = PointRandom(field, size)
 move = 'downward'
 field_end = field
-while True:
-    try:
-        field_end = field
+Game = True
 
-        if move == 'upward':
-            field = shake.move_upward()
-        elif move == 'left':
-            field = shake.move_left()
-        elif move == 'downward':
-            field = shake.move_downward()
-        elif move == 'right':
-            field = shake.move_right()
-        
+rec = open('rec.txt', 'r')
+recd = int(rec.read())
+rec.close()
+a = recd
+
+while Game:
+    field_end = field
+    now = time.time()
+
+    while time.time() - now < 1/speed:
+
         if keyboard.is_pressed('w'):
             move = 'upward'
 
@@ -41,15 +42,31 @@ while True:
 
         if keyboard.is_pressed('esc'):
             os.system('cls')
-            break
+            Game = False
 
-        score = shake.print_score()
-        
-        #Выводим что получилось
-        F.FieldOutput(field, score)
-        time.sleep(0.1)
-        os.system('cls')
-    except:
-        break
-F.FieldOutput(field_end, score)
+    if move == 'upward':
+        field, Game = shake.move_upward()
+    elif move == 'left':
+        field, Game = shake.move_left()
+    elif move == 'downward':
+        field, Game = shake.move_downward()
+    elif move == 'right':
+        field, Game = shake.move_right()
+
+    score = shake.print_score()
+    
+    if recd <= int(score):
+        recd = int(score)
+
+    #Выводим что получилось
+    os.system('cls')
+    F.FieldOutput(field, score, recd)
+
+if a < recd:
+    rec = open('rec.txt', 'w')
+    rec.write(str(recd))
+    rec.close()
+
+os.system('cls')
+F.FieldOutput(field_end, score, recd)
 print("Game Over")

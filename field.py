@@ -2,12 +2,13 @@ class Field(object):
     def __init__(self, size):
         self.size = size
 
-    def FieldOutput(self, field, score):
+    def FieldOutput(self, field, score, recd):
         for k in range(self.size):
             for l in range(self.size):
                 print(field[k][l], end="")
             print()
         print('Счет:   ' + str(score))
+        print('Рекорд:   ' + str(recd))
 
     def FieldCreate(self):
             field = []
